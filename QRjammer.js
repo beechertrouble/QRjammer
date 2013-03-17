@@ -1,3 +1,10 @@
+/**
+*
+* QR Jammer
+* by BeecherTrouble : beechbot.com
+* special thanks to Google and Google Charts
+*
+*/
 var QRjammer = function(args) {
 	
 	if(window.QRJ === undefined)
@@ -10,7 +17,8 @@ var QRjammer = function(args) {
 	this.appendTo = this.defs.appendTo || false;
 	this.addButton = this.defs.addButton || true;
 	this.buttonSize = this.defs.buttonSize || 30;
-	this.buttonPos = this.defs.buttonPosClass || 'QRJ_fixed-bottom-right';
+	this.buttonPos = this.defs.buttonClass || 'QRJ_fixed-bottom-right';
+	this.buttonAppendTo = this.defs.buttonAppendTo || false;
 		//
 	this.logoSRC = "data:image/gif;base64,R0lGODlhZABkAIAAAAAAAP///yH5BAAAAAAALAAAAABkAGQAAAL/jI+py+0Po5y02ouz3rz7D4bi2ADmiabqyqpJC8fyI9f2+d46TO++i/gJcY7hMGf09ZI7JPO2fNqc0lmxOg1ia9Fti+pddcPAA5l3PYu16jKjvTbDU2M6Bi3/3vUlvMUfEJMBqCC4xwJmd0GYiDLIZ2C4CLkg+UdpWcHIhngYF7kZEQpKSQGYaVraSDTZmed6CVs5WsdKKpuKu2ryKIs6QfsrcUqb9jmrOoxZ3KfLeZx7LCya/AoNvFwNEcz8lu1MDX57rezbjUxu7ab5nb6tHXhe2L4eXb8L0Cstv1try24OnrF7zwi+o6cIoLh4c/41dDRwDr4w/s5M9FKRzMUt/xkpFoTTEePHNiE5jlRTEstGlRFBnrTYkuRLjSRq2ryJM6fOnTx7+vwJNKjQDg8dFs0XE+VMj80erqySEupSkU0bDo0q5WpSmFrRWZ1qsqpEsCzFulR31lvRp1m3Im3l7uq0g3GHzq3YVe3Crfj0GRz3F+9Mvwm9BuY72FPgu4jRQoS7mN/LvIYL27NMmbHZf5QZ7t3MKzFkzKJj7RMI+q3euqn7KibtmDO2z0E1r4at1XZl2Xl1zwtIe3fo1KoVrvPdzy3hx4BxCya+3Cjq28yFDzd+WOjR4p23d2b7BDwTrOHJSiXOtLlM9FS/e/7q/v3Y+N7Nt2UfVr3S+Pz7+wj/D2CAAoJQAAA7";
 			
@@ -37,10 +45,11 @@ var QRjammer = function(args) {
 	} // addJamCSS
 	this.addButton = function() {
 		
-		var button = '<a class="QRJ_button ' + this.buttonPos + '" onclick="QRJ.show()" title="click for QR code"><img src="' + this.logoSRC + '" width="' + this.buttonSize + '" height="' + this.buttonSize + '" alt="click for QR" /></a>';
+		var button = '<a class="QRJ_button ' + this.buttonPos + '" onclick="QRJ.show()" title="click for QR code"><img src="' + this.logoSRC + '" width="' + this.buttonSize + '" height="' + this.buttonSize + '" alt="click for QR" /></a>',
+			el = !this.buttonAppendTo ? $("body") : this.buttonAppendTo;
 		
 		if($(".QRJ_button").length <= 0)
-			$('body').append(button);
+			el.append(button);
 		
 	} // addButton
 	this.addJamJar = function() {
