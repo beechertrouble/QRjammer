@@ -15,7 +15,7 @@ Basic Usage:
 - enjoy.
 
 Advanced Usage:
-- slam an args object in there to change : <code>QRjammer({...})</code>
+- slam an args object in there (like this <code>QRjammer({...})</code> ) to change defaults :
   - the URL for the QR <code>{loc : 'http://google.com'}</code>
     - defaults to window.location.href  
   - the size of the QR code image <code>{size : 200}</code>
