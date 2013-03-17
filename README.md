@@ -11,8 +11,5 @@ Default behavior:
 
 Basic Usage:
 - include the QRjammer.js (assumes you have jQuery included first)
-- next :
-  <script type="text/javascript">
-    QRjammer();
-  </script>
+- when docready or whatever, call this function QRjammer();
 - enjoy.
