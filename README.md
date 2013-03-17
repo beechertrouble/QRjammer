@@ -10,9 +10,9 @@ Default behavior:
 
 
 Basic Usage:
-1 - include the QRjammer.js (assumes you have jQuery included first)
-2 - next :
+- include the QRjammer.js (assumes you have jQuery included first)
+- next :
   <script type="text/javascript">
     QRjammer();
   </script>
-3 - enjoy.
+- enjoy.
