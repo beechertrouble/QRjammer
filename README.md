@@ -23,8 +23,9 @@ Advanced Usage:
   - the size of the button <code>{buttonSize : 50}</code>
       - defaults to 30
   - the position/class of the button <code>{buttonClass : 'QRJ_fixed-top-left'} 
-      - defaults to bottom right | built-in classes : 
-        - QRJ_fixed-top-left, QRJ_fixed-top-right, QRJ_fixed-bottom-left, QRJ_fixed-bottom-right 
+      - defaults to bottom right 
+      - built-in classes : 
+      - QRJ_fixed-top-left, QRJ_fixed-top-right, QRJ_fixed-bottom-left, QRJ_fixed-bottom-right 
   - add default CSS <code>{addCSS : false}</code>
       - defaults to true
   - where to append the QR image <code>{appendTo : $(whatever) }</code>
