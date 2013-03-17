@@ -13,3 +13,7 @@ Basic Usage:
 - include the QRjammer.js (assumes you have jQuery included first)
 - when docready or whatever, call this function QRjammer();
 - enjoy.
+
+Advanced Usage:
+- slam an args object in there to change :
+  - the size of the button <code>{size : 50}</code>
