@@ -29,7 +29,7 @@ var QRjammer = function(args) {
 		var css = '<style id="QRJ_style">';
 			css += '#QRJ_jamjar {position:fixed;top:0px;right:0px;bottom:0px;left:0px;display:none;width:100%;background:rgba(0,0,0,0.5) no-repeat center center;}';
 			css += '#QRJ_close {position:absolute;top:0.5em;right:0.5em;display:block;cursor:pointer;padding:1em 1em 0.75em;color:#fff;background:#000;background:rgba(0,0,0,0.25);line-height:1;}';
-			css += '.QRJ_button {background:#fff;padding:0.25em;cursor:pointer;opacity:0.5;-moz-transition:opacity 0.4s ease;-webkit-transition:opacity 0.4s ease;-o-transition:opacity 0.4s ease;-ms-transition:opacity 0.4s ease;transition:opacity 0.4s ease;}';
+			css += '.QRJ_button {background:#fff;cursor:pointer;opacity:0.5;-moz-transition:opacity 0.4s ease;-webkit-transition:opacity 0.4s ease;-o-transition:opacity 0.4s ease;-ms-transition:opacity 0.4s ease;transition:opacity 0.4s ease;}';
 			css += '.QRJ_button:focus, .QRJ_button:hover {opacity:1;}';
 			css += '.QRJ_fixed-top-left {position:fixed;top:0.25em;left:0.25em;}';
 			css += '.QRJ_fixed-top-right {position:fixed;top:0.25em;right:0.25em;}';
