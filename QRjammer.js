@@ -44,7 +44,7 @@ var QRjammer = function(args) {
 	this.addButton = function() {
 		
 		var iCanHasSvg = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.0"),
-			imgSrc = iCanHasSvg ? 'data:image/svg+xml;base64,' + this.logoSRCsvg : this.logoSRCgif;
+			imgSrc = iCanHasSvg ? 'data:image/svg+xml;base64,' + this.logoSRCsvg : 'https://chart.googleapis.com/chart?cht=qr&chs=' + this.buttonSize + 'x' + this.buttonSize + '&chl=' + escape('http://beechbot.com');
 		
 		var button = '<a class="QRJ_button ' + this.buttonPos + '" onclick="QRJ.show()" title="click for QR code">';
 				button += '<img src="' + imgSrc + '" width="' + this.buttonSize + '" height="' + this.buttonSize + '" alt="QR" />';
