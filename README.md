@@ -22,7 +22,7 @@ Advanced Usage:
       - defaults to 300
   - the size of the button <code>{buttonSize : 50}</code>
       - defaults to 30
-  - the position/class of the button <code>{buttonClass : 'QRJ_fixed-top-left'} 
+  - the position/class of the button <code>{buttonClass : 'QRJ_fixed-top-left'}</code> 
       - defaults to bottom right 
       - built-in classes : 
       - QRJ_fixed-top-left, QRJ_fixed-top-right, QRJ_fixed-bottom-left, QRJ_fixed-bottom-right 
