@@ -28,8 +28,3 @@ Advanced Usage:
       - QRJ_fixed-top-left, QRJ_fixed-top-right, QRJ_fixed-bottom-left, QRJ_fixed-bottom-right 
   - add default CSS <code>{addCSS : false}</code>
       - defaults to true
-  - where to append the QR image <code>{appendTo : $(whatever) }</code>
-      - defaults to <code>$('body')</code>
-      - NOTE: default behavior will create a modal view, non-default will drop an img into your appendTo element
-  - where to append the QR button <code>{buttonAppendTo : $(whatever) }</code>
-      - defaults to <code>$('body')</code>
