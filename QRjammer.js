@@ -23,13 +23,17 @@ var QRjammer = function(args) {
 	// thanks google!	
 	this.QRSRC = 'https://chart.googleapis.com/chart?cht=qr&chs=' + this.size + 'x' + this.size + '&chl=' + escape(this.loc);	
 	
+	
 	/* ===== funcs ==== */
 	this.addJamCSS = function() {
 		
 		var css = '<style id="QRJ_style">';
 			css += '#QRJ_jamjar {position:fixed;top:0px;right:0px;bottom:0px;left:0px;display:none;width:100%;background:rgba(0,0,0,0.5) no-repeat center center;}';
+			css += '#QRJ_jamjar_content {position:relative;display:block;text-align:center;padding:2em 2em 1em;color:#fff;background:#000;max-width:' + this.size + 'px;margin:8em auto 0;}'
+			css += '#QRJ_jamjar_content img {position:relative;display:block;margin:0px auto;max-width:100%;}'
+			css += '#QRJ_shortURL_wrap {font-size:2em;padding:0.5em 0 0;line-height:1em;}'
 			css += '#QRJ_close {position:absolute;top:0.5em;right:0.5em;display:block;cursor:pointer;padding:1em 1em 0.75em;color:#fff;background:#000;background:rgba(0,0,0,0.25);line-height:1;}';
-			css += '.QRJ_button {background:#fff;cursor:pointer;opacity:0.5;-moz-transition:opacity 0.4s ease;-webkit-transition:opacity 0.4s ease;-o-transition:opacity 0.4s ease;-ms-transition:opacity 0.4s ease;transition:opacity 0.4s ease;}';
+			css += '.QRJ_button {background:#fff;padding:0.25em;cursor:pointer;opacity:0.5;-moz-transition:opacity 0.4s ease;-webkit-transition:opacity 0.4s ease;-o-transition:opacity 0.4s ease;-ms-transition:opacity 0.4s ease;transition:opacity 0.4s ease;}';
 			css += '.QRJ_button:focus, .QRJ_button:hover {opacity:1;}';
 			css += '.QRJ_fixed-top-left {position:fixed;top:0.25em;left:0.25em;}';
 			css += '.QRJ_fixed-top-right {position:fixed;top:0.25em;right:0.25em;}';
@@ -44,7 +48,7 @@ var QRjammer = function(args) {
 	this.addButton = function() {
 		
 		var iCanHasSvg = document.implementation.hasFeature("http://www.w3.org/TR/SVG11/feature#Shape", "1.0"),
-			imgSrc = iCanHasSvg ? 'data:image/svg+xml;base64,' + this.logoSRCsvg : 'https://chart.googleapis.com/chart?cht=qr&chs=' + this.buttonSize + 'x' + this.buttonSize + '&chl=' + escape('http://beechbot.com');
+			imgSrc = iCanHasSvg ? 'data:image/svg+xml;base64,' + this.logoSRCsvg : this.logoSRCgif;
 		
 		var button = '<a class="QRJ_button ' + this.buttonPos + '" onclick="QRJ.show()" title="click for QR code">';
 				button += '<img src="' + imgSrc + '" width="' + this.buttonSize + '" height="' + this.buttonSize + '" alt="QR" />';
@@ -58,7 +62,7 @@ var QRjammer = function(args) {
 	} // addButton
 	this.addJamJar = function() {
 		
-		var JamJar = '<div id="QRJ_jamjar" onclick="QRJ.hide()"><a id="QRJ_close" onclick="QRJ.hide()">close</div>';
+		var JamJar = '<div id="QRJ_jamjar"><a id="QRJ_close" onclick="QRJ.hide()">close</a><div id="QRJ_jamjar_content"></div></div>';
 		
 		if($("#QRJ_jamjar").length <= 0)
 			$('body').append(JamJar);
@@ -82,7 +86,7 @@ var QRjammer = function(args) {
 		
 	} // hide
 	this.init = function() {
-	
+				
 		if(this.addCSS)
 			this.addJamCSS();
 			
@@ -96,24 +100,39 @@ var QRjammer = function(args) {
 	this.getQR = function() {
 		
 		this.loc = this.defs.loc || window.location.href;
+		this.shortURL = this.loc;
+		this.getShortURL();
 		this.QRSRC = 'https://chart.googleapis.com/chart?cht=qr&chs=' + this.size + 'x' + this.size + '&chl=' + escape(this.loc);	
 		
 	} // getQR
+	this.getShortURL = function() {
+		
+		var my = this;
+		
+		$.ajax('https://www.googleapis.com/urlshortener/v1/url', {
+			data : JSON.stringify( {"longUrl": this.loc}),
+			contentType : 'application/json',
+			type : 'POST',
+			dataType: "json",
+			success: function (d) {
+				
+				my.shortURL = d.id;
+				$("#QRJ_shortURL_wrap").text(my.shortURL);
+				
+			}
+		});
+		
+	} // getShortURL
 	this.addQR = function() {
 		
 		// update QR?
 		this.getQR();
 		
-		if(!this.appendTo) {
-			
-			$("#QRJ_jamjar").css({'background-image' : 'url(' + this.QRSRC + ')'});
-			
-		} else {
-			
-			this.appendTo.append('<img class="QRJ_img" src="' + this.QRSRC + '" alt="QR for : ' + this.loc + '" />');
-			
-		}
-		
+		var content = '<img class="QRJ_img" src="' + this.QRSRC + '" alt="QR for : ' + this.loc + '" /><div id="QRJ_shortURL_wrap"></div>';
+				
+		$("#QRJ_jamjar_content").html(content);
+
+				
 	}  //
 	
 	this.logoSRCgif = "data:image/gif;base64,R0lGODlhZABkAIAAAAAAAP///yH5BAAAAAAALAAAAABkAGQAAAL/jI+py+0Po5y02ouz3rz7D4biSJbmiaYIwLbuC7cSvLJOjOdTzr+zf5A1ekTArsj7uWrGIVKnfNIiU4OQIcUdbZQrc5mIMYNeKtd8Vi7E4WrgCt5um3IF++uFlyF75zlJRqcWeKOnRRgVePeWhjbmRwdo1Vj4BzUp6IiIZbjYx2l5iFmRR/ml6Pa51pkamtkGBKuIGsv4CkkbZzsL2deZW3oLGnm5iyl87OsKnKZqx1oLjWx7+5scbTrMLChdWb18resMSyxqTO2suxknec43/jyNx519TFofLx8f1Yyv/q6PVx2AwbzdC2ivC755j7QpRIguCzhqm9xJyzJH4kR2//3oldO4cJ5EgRw9NgT5TwU5ZeZUlli0zSUKmOHgiaApsmDFDTgt9KzZsSGHnw9Txqxok19INEaBmtypgagHN/lYIln1JATVlaYwViWitdbXb1nHtlMqVlZCilxjteuGtum5kq96HB0VLuPWk9ZyXgyaN266jXvsOuWbFpdTuVYbm2M5ZxvjrnuLCIWqOGJLtW2xvqUMcfJTzpr75hrEtNJlvIfXntaU2s9qi5f+ScXskKvnvd4gZ478dXfi3qANHiTrWK5wssaLCl+e9DXpfD7hapYecTnJKre3u+XeKuUdutYJSh8fPrl38kvXlmxO9D111u4e0MXtnnd+5Ejbs//9P5grAZbjWX+h9TUgdvPVt99sucnHGnsIecWgcw2uUx5xhlUIHICAeTicWbX5Z8KGn00DoUxtSajTgyS+JMmJ8L24ohTYJYVgZf6hVB6OhCUWHY8Cfmjfj+LtKOSN7eUIJJIv/jXkRwmSU92TUUqoIJVaWjiQieCF+J9AHco4loFCiuOklNggZ4hfKDlYYGv0ndfRmS2aJ2eF6HlkJ5FFXunnnLKVuU9gsZUWKIeFdrZod/t5UhxsImGVZWZkDqOjP5EKamkxA2aK4qaKLngpdKCFyhx+C6J21aJ66jfqlqxa5qp6gx46K1i1nhpgh7luKJStoOg1kmu91JkppYInlRXmsXwm6+qfbxqLKbJNpqpittpuy2233n4LbrjijktuueaeK0EBADs=";
