@@ -28,9 +28,9 @@ var QRjammer = function(args) {
 	this.addJamCSS = function() {
 		
 		var css = '<style id="QRJ_style">'
-				+ '#QRJ_jamjar {position:fixed;top:0px;right:0px;bottom:100%;opacity:0;left:0px;display:block;overflow:hidden;width:100%;background:rgba(0,0,0,0.5) no-repeat center center;transition:all 0.3s ease;}'
+				+ '#QRJ_jamjar {position:fixed;top:0px;right:-20px;bottom:100%;opacity:0;left:0px;display:block;overflow-x:hidden;overflow-y:scroll;width:100%;background:rgba(0,0,0,0.5) no-repeat center center;transition:all 0.3s ease;}'
 				+ '#QRJ_jamjar.showQR{bottom:0%;opacity:1;}'
-				+ '#QRJ_jamjar_content {position:relative;display:block;text-align:center;padding:2em 2em 1em;color:#fff;background:#000;max-width:' + size + 'px;margin:8em auto 0;}'
+				+ '#QRJ_jamjar_content {position:relative;display:block;text-align:center;padding:2em 2em 1em;color:#fff;background:#000;max-width:' + size + 'px;margin:4em auto 2em;}'
 				+ '#QRJ_jamjar_content img {position:relative;display:block;margin:0px auto;max-width:100%;}'
 				+ '#QRJ_shortURL_wrap {font-size:2em;padding:0.5em 0 0;line-height:1em;}'
 				+ '#QRJ_close {position:absolute;top:0.5em;right:0.5em;display:block;cursor:pointer;padding:1em 1em 0.75em;color:#fff;background:#000;background:rgba(0,0,0,0.25);line-height:1;}'
