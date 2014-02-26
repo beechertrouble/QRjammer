@@ -11,11 +11,11 @@ Default behavior:
 
 Basic Usage:
 - include the QRjammer.js (assumes you have jQuery included first)
-- when docready or whatever, call this function <code>QRjammer();</code>
+- when docready or whatever, instantiate a new QRjammer like this : <code>var myQR = new QRjammer().init();</code>
 - enjoy.
 
 Advanced Usage:
-- slam an args object in there (like this <code>QRjammer({...})</code> ) to change defaults :
+- slam an args object in there (like this <code>var myQR = new QRjammer({...}).init()</code> ) to change defaults :
   - the URL for the QR <code>{loc : 'http://google.com'}</code>
       - defaults to window.location.href  
   - the size of the QR code image <code>{size : 200}</code>
