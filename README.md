@@ -11,17 +11,17 @@ Default behavior:
 
 Basic Usage:
 - include the QRjammer.js (assumes you have jQuery included first)
-- when docready or whatever, instantiate a new QRjammer like this : <code>var myQR = new QRjammer().init();</code>
+- when docready or whatever, init via the global like this : <code>QRjammer.init()</code>
 - enjoy.
 
 Advanced Usage:
-- slam an args object in there (like this <code>var myQR = new QRjammer({...}).init()</code> ) to change defaults :
+- slam an args object in there (like this <code>var myQR = new QRjammer.init({...})</code> ) to change defaults :
   - the URL for the QR <code>{loc : 'http://google.com'}</code>
       - defaults to window.location.href  
   - the size of the QR code image <code>{size : 200}</code>
       - defaults to 300
-  - the size of the button <code>{buttonSize : 50}</code>
-      - defaults to 30
+  - the size of the button <code>{buttonSize : '3em'}</code>
+      - defaults to '2em'
   - the position/class of the button <code>{buttonClass : 'QRJ_fixed-top-left'}</code> 
       - defaults to bottom right 
       - built-in classes : 
