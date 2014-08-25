@@ -1,0 +1,17 @@
+{
+	"name": "QRjammer",
+	"version": "1.0.0",
+	"homepage": "https://github.com/beechertrouble/QRjammer",
+	"authors": [
+		"Beecher <beechbot@gmail.com>"
+	],
+	"ignore": [
+		"node_modules",
+		"Gruntfile.js",
+		"package.json",
+		".project"
+	],
+	"main": "QRjammer.min.js",
+	"license": "MIT",
+	"private": false
+}
