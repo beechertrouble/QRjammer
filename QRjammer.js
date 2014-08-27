@@ -5,20 +5,35 @@
 * special thanks to Google and Google Charts
 * requires jquery ...
 *
+*
 */
 (function($, scope) {
 		
 	var QR = {
-			shortURL : undefined
+			args : false,
+			imgSRC : undefined,
+			shortURL : undefined,
+			inited : false
+		}, 
+		defaults = {
+			loc: window.location.href,
+			size : 300,
+			addCSS : true,
+			addModal : true,
+			addButton : true,
+			addShortURL : true,
+			buttonSize : '2em',
+			buttonClass : 'QRJ_fixed-bottom-right',
+			buttonAppendTo : false
 		},
-		size, 
-		addCSS, 
-		appendTo, 
-		addButton,
-		buttonSize,
-		buttonClass,
-		buttonAppendTo, 
-		JamJar = '<div id="QRJ_jamjar"><a id="QRJ_close">close</a><span id="QRJ_vcenter"></span><div id="QRJ_jamjar_content_wrap"><div id="QRJ_jamjar_content"></div></div></div>';
+		modalTemp = '<div id="QRJ_jamjar">'
+					+ '<a id="QRJ_close">close</a>'
+					+ '<span id="QRJ_vcenter"></span>'
+					+ '<div id="QRJ_jamjar_content_wrap">'
+						+ '<div id="QRJ_jamjar_content"></div>'
+					+ '</div>'
+				+'</div>',
+		$modal = false;
 	
 	/** 
 	* private
@@ -128,22 +143,22 @@
 	}; // _addJamCSS()
 	
 	 function _addButton() {
-		
-		var button = '<a class="QRJ_button ' + buttonClass + '" title="click for QR and short URL" style="font-size:' + buttonSize + ';">&#9875;</a>';
-		
-		var el = !buttonAppendTo ? $("body") : buttonAppendTo;
+				
+		var el = !QR.args.buttonAppendTo ? $("body") : QR.args.buttonAppendTo;
 		
 		if($(".QRJ_button").length <= 0)
-			el.append(button);
+			el.append('<a class="QRJ_button ' + QR.args.buttonClass + '" title="click for QR and short URL" style="font-size:' + QR.args.buttonSize + ';">&#9875;</a>');
 					
 	}; // _addButton()
 	
-	function _addJamJar() {
+	function _addModal() {
 				
 		if($("#QRJ_jamjar").length <= 0)
-			$('body').append(JamJar);
+			$('body').append(modalTemp);
+			
+		$modal = $("#QRJ_jamjar");
 					
-	}; // _addJamJar()
+	}; // _addModal()
 	
 	function _def(ting, def) {
 		
@@ -178,98 +193,128 @@
 		// update QR?
 		QR.getQR();
 		
-		var shorty = QR.shortURL === undefined ? '' : QR.shortURL;
+		var shorty = QR.addShortURL || QR.shortURL === undefined ? '' : QR.shortURL;
 						
-		$("#QRJ_jamjar_content").html('<img class="QRJ_img" src="' + QR.QRSRC + '" alt="QR for : ' + QR.loc + '" /><div id="QRJ_shortURL_wrap">' + shorty + '</div>');
+		$("#QRJ_jamjar_content").html('<img class="QRJ_img" src="' + QR.imgSRC + '" alt="QR for : ' + QR.args.loc + '" /><div id="QRJ_shortURL_wrap">' + shorty + '</div>');
 
 				
-	};  //
+	};  // _addQR()
+	
+	function _reqShortURL(loc, async) {
+		
+		if(QR.args.loc === undefined) 
+			QR.args.loc = _def(loc, window.location.href);
+		
+		loc = _def(loc, QR.args.loc);	
+		async = _def(async, false);
+				
+		$.ajax('https://www.googleapis.com/urlshortener/v1/url', {
+			data : JSON.stringify( {"longUrl": loc}),
+			contentType : 'application/json',
+			type : 'POST',
+			dataType: "json",
+			async : async,
+			success: function (d) {
+				
+				QR.shortURL = d.id;
+				if(QR.args.addShortURL && $("#QRJ_shortURL_wrap").length > 0)
+					$("#QRJ_shortURL_wrap").text(QR.shortURL);
+				
+				return QR.shortURL;
+									
+			},
+			error: function(e) {
+				
+				if(window.console !== undefined)
+					console.log(e);
+				return QR.shortURL;
+									
+			}			
+		});
+		
+	}; // _reqShortURL()
 	
 	/** 
 	* public
 	*/
 	QR.show = function() {
 		
-		if($("#QRJ_shortURL_wrap").length <= 0)		
+		if(!QR.inited)
+			QR.init();
+		
+		if(QR.imgSRC === undefined)		
 			_addQR();
 		
-		var el = !appendTo ? $("#QRJ_jamjar") : appendTo;
-		
-		el.addClass('showQR');
-
+		$modal.addClass('showQR');
 		
 	}; // show
 	QR.hide = function() {
-		
-		var el = !appendTo ? $("#QRJ_jamjar") : appendTo;
-		
+				
 		el.removeClass('showQR');
 		
 	}; // hide
 	QR.init = function(args) {
 		
-		args = _def(args, {});
+		QR.args = _def(args, defaults);
 		
-		size = _def(args.size, 300);
-		addCSS = _def(args.addCSS, true);
-		appendTo = _def(args.appendTo, false);
-		addButton = _def(args.addButton, true);
-		buttonSize = _def(args.buttonSize, '2em');
-		buttonClass = _def(args.buttonClass, 'QRJ_fixed-bottom-right');
-		buttonAppendTo = _def(args.buttonAppendTo, false);
+		if(typeof args == 'object') {
+			QR.args.loc = _def(args.loc,  defaults.loc);
+			QR.args.size = _def(args.size, defaults.size);
+			QR.args.addCSS = _def(args.addCSS, defaults.addCSS);
+			QR.args.addModal = _def(args.addModal, defaults.addModal);
+			QR.args.addButton = _def(args.addButton, defaults.addButton);
+			QR.args.addShortURL = _def(args.addShortURL, defaults.addShortURL);
+			QR.args.buttonSize = _def(args.buttonSize, defaults.buttonSize);
+			QR.args.buttonClass = _def(args.buttonClass, defaults.buttonClass);
+			QR.args.buttonAppendTo = _def(args.buttonAppendTo, defaults.buttonAppendTo);
+		}
 		
-		QR.loc = _def(args.loc,  window.location.href);
-		
+		QR.imgSRC = 'https://chart.googleapis.com/chart?cht=qr&chs=' + QR.args.size + 'x' + QR.args.size + '&chl=' + escape(QR.args.loc);
+				
 		$(document).ready(function() {		
+								
+			if(QR.args.addCSS)
+				_addJamCSS(QR.args.size);
+				
+			if(QR.args.addModal)  { // add modal ...
 			
-			_bindings();
+				_addModal();
+				
+				if(QR.args.addButton) // add trigger button ...
+					_addButton();
 					
-			if(addCSS)
-				_addJamCSS(size);
+				_bindings(); // we only need the bindings if the ui bits exist 
 				
-			if(addButton)
-				_addButton();
-				
-			if(!appendTo) 
-				_addJamJar();
+			}
+			
+			QR.inited = true;
+			
 		});
+	
 			
 	}; // init
 	QR.getQR = function(loc) {
 		
-		if(QR.loc === undefined) {
-			QR.loc = _def(loc, window.location.href);
-			QR.shortURL = QR.loc;
-		}
+		if(!QR.inited)
+			QR.init();
 		
-		if(!loc === undefined || QR.shortURL === undefined)
-			QR.getShortURL();
+		if(loc !== undefined || QR.args.loc === undefined) 
+			QR.args.loc = _def(loc, window.location.href);
 			
-		QR.QRSRC = 'https://chart.googleapis.com/chart?cht=qr&chs=' + size + 'x' + size + '&chl=' + escape(QR.loc);	
+		if(QR.args.addShortURL && (loc !== undefined || QR.shortURL === undefined))
+			QR.getShortURL(QR.args.loc, true);
+			
+		QR.imgSRC = 'https://chart.googleapis.com/chart?cht=qr&chs=' + QR.args.size + 'x' + QR.args.size + '&chl=' + escape(QR.args.loc);	
+		
+		return QR.imgSRC;
 		
 	}; // getQR
-	QR.getShortURL = function(loc) {
+	QR.getShortURL = function(loc, async) {
+
+		if(QR.shortURL === undefined)
+			_reqShortURL(loc, async);
 		
-		QR.loc = _def(loc,  window.location.href);
-				
-		$.ajax('https://www.googleapis.com/urlshortener/v1/url', {
-			data : JSON.stringify( {"longUrl": QR.loc}),
-			contentType : 'application/json',
-			type : 'POST',
-			dataType: "json",
-			success: function (d) {
-				
-				QR.shortURL = d.id;
-				$("#QRJ_shortURL_wrap").text(QR.shortURL);
-				
-			},
-			error: function(e) {
-				
-				if(window.console !== undefined)
-					console.log(e);
-					
-			}
-		});
+		return QR.shortURL;
 		
 	}; // getShortURL
 	
