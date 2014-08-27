@@ -238,11 +238,11 @@
 	* public
 	*/
 	QR.show = function() {
-		
+
 		if(!QR.inited)
 			QR.init();
 		
-		if(QR.imgSRC === undefined)		
+		if($("#QRJ_jamjar_content").children().length <= 0)		
 			_addQR();
 		
 		$modal.addClass('showQR');
@@ -250,7 +250,7 @@
 	}; // show
 	QR.hide = function() {
 				
-		el.removeClass('showQR');
+		$modal.removeClass('showQR');
 		
 	}; // hide
 	QR.init = function(args) {
