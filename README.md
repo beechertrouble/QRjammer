@@ -2,7 +2,7 @@ QRjammer
 ========
 
 QR code jammer for sharing from desktop to mobile device, or device to device ... basically so you don't have to type in the url on your phone...
-Special thanks to Google and Google Charts for creating the QR image generation service and URL shortener! Demo at : [http://go.beechbot.com/QRjammer](http://go.beechbot.com/QRjammer)
+Special thanks to Google and Google Charts for creating the QR image generation service and URL shortener! Demo at : [http://beechbot.com/demos/QRjammer](http://beechbot.com/demos/QRjammer)
 
 Requires:
 --
